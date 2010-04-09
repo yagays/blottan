@@ -26,15 +26,21 @@ end
       choice(block.search("Article/Abstract/AbstractText").inner_text,h,id)
      end
   end
-    f = open("result/#{elem}.csv","w")
+
+  n = elem[1,3]
+  f = open("result/#{n}.csv","w")
   f.puts "id," + namelist.join(",")
-  idlist.each do |id|
+
+  idlist.each.each do |id|
+    
     tmp = [id]
     namelist.each do |e|
       tmp.push h[id => e] 
     end
-    f.puts tmp.join(",")
+    if tmp[2..5] != [0,0,0,0]
+      f.puts tmp.join(",")
+    end
   end
   f.close
-  puts "#{elem}.csv end"
+  puts "#{n}.csv end"
 end
