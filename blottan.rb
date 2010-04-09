@@ -7,7 +7,7 @@ require 'pp'
 
 def choice(abst,h,id)
   abst.scan(/((northern|southern|eastern|western) blotting)/i).each do |elem|
-    h[id => elem[1].downcase] = 1
+    h[id => elem[1].downcase] += 1
   end
 end
 
@@ -26,13 +26,11 @@ end
       choice(block.search("Article/Abstract/AbstractText").inner_text,h,id)
      end
   end
-
+  
   n = elem[1,3]
-  f = open("result/#{n}.csv","w")
+  f = open("result/count#{n}.csv","w")
   f.puts "id," + namelist.join(",")
-
   idlist.each.each do |id|
-    
     tmp = [id]
     namelist.each do |e|
       tmp.push h[id => e] 
@@ -42,5 +40,5 @@ end
     end
   end
   f.close
-  puts "#{n}.csv end"
+  puts "count#{n}.csv end"
 end
