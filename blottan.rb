@@ -6,8 +6,8 @@ require 'pp'
 
 
 def choice(abst,h,id)
-  abst.scan(/((northern|southern|eastern|western) blotting)/i).each do |elem|
-    h[id => elem[1].downcase] += 1
+  abst.scan(/((northern|Northern|southern|Southern|eastern|Eastern|western|Western) blotting)/).each do |elem|
+    h[id => elem[1]] += 1
   end
 end
 
@@ -15,7 +15,7 @@ end
   h = Hash.new
   h.default = 0
   idlist = []
-  namelist = [:y, "northern","southern","eastern","western"]
+  namelist = [:y, "northern","Northern","southern","Southern","eastern","Eastern","western","Western"]
   doc = Nokogiri::XML(open("MEDLINE/medline10n#{elem}.xml"))
   doc.search("MedlineCitationSet/MedlineCitation").each do |block|
     id = block.at("PMID").inner_text
@@ -28,17 +28,17 @@ end
   end
   
   n = elem[1,3]
-  f = open("result/count#{n}.csv","w")
+  f = open("countresult/#{n}.csv","w")
   f.puts "id," + namelist.join(",")
   idlist.each.each do |id|
     tmp = [id]
     namelist.each do |e|
       tmp.push h[id => e] 
     end
-    if tmp[2..5] != [0,0,0,0]
+    if tmp[2..9] != [0,0,0,0,0,0,0,0]
       f.puts tmp.join(",")
     end
   end
   f.close
-  puts "count#{n}.csv end"
+  puts "#{n}.csv end"
 end
