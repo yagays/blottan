@@ -1,4 +1,4 @@
-# abst = "Measured By western Blotting. Western blot is hoge (Western blotting is spam). This is eastern hat."
+# abst = "Measured By western Blotting. Western blot is hoge (Western blotting is spam). This is eastern hat. hoge is Western blot."
 # thern = ["northern","Northern","southern","Southern","eastern","Eastern","western","Western"]
 # h={ }
 # id="1"
@@ -13,13 +13,7 @@ def choice(abst,word,h,id)
       before = a[n-1]
       after  = a[n+1]
       if /blot/i =~ after
-        if before[before.length - 1] == 46  #before = . 
-          h[id => match] = 1
-        elsif match[0] == 40 #match has (...
-          c = key.length
-          d = match.length
-          h[id => match[d-c,c]] = 1
-        else
+        if before[before.length - 1] != 46  && match[0] != 40
           h[id => match] = 1
         end
       end
@@ -27,6 +21,11 @@ def choice(abst,word,h,id)
   end
 end
 
+#           h[id => match] = 1
+#         elsif match[0] == 40 #match has (...
+#           c = key.length
+#           d = match.length
+#           h[id => match[d-c,c]] = 1
 
 # choice(abst,thern,h,id)
 # p h

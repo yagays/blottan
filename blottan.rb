@@ -8,7 +8,7 @@ require 'choice'
 
 
 
-("0150".."0740").each do |elem|
+("0164".."0740").each do |elem|
   h = Hash.new
   h.default = 0
   idlist = []
@@ -17,7 +17,9 @@ require 'choice'
   doc = Nokogiri::XML(open("MEDLINE/medline10n#{elem}.xml"))
   doc.search("MedlineCitationSet/MedlineCitation").each do |block|
     id = block.at("PMID").inner_text
-    y = block.search("Article/Journal/JournalIssue/PubDate/Year").inner_text.to_i 
+    y = block.search("Article/Journal/JournalIssue/PubDate/Year").inner_text.to_i
+    c = block.search("MedlineJournalInfo/Country").inner_text
+    puts id +"\t" + c
     if y > 1975
       h[id => :y] = y
       idlist.push id
@@ -25,18 +27,18 @@ require 'choice'
      end
   end
   
-  n = elem[1,3]
-  f = open("result/#{n}.csv","w")
-  f.puts "id," + namelist.join(",")
-  idlist.each.each do |id|
-    tmp = [id]
-    namelist.each do |e|
-      tmp.push h[id => e] 
-    end
-    if tmp[2..9] != [0,0,0,0,0,0,0,0]
-      f.puts tmp.join(",")
-    end
-  end
-  f.close
-  puts "#{n}.csv end"
+#   n = elem[1,3]
+#   f = open("rslt/#{n}.csv","w")
+#   f.puts "id," + namelist.join(",")
+#   idlist.each.each do |id|
+#     tmp = [id]
+#     namelist.each do |e|
+#       tmp.push h[id => e] 
+#     end
+#     if tmp[2..9] != [0,0,0,0,0,0,0,0]
+#       f.puts tmp.join(",")
+#     end
+#   end
+#   f.close
+#   puts "#{n}.csv end"
 end
